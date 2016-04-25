@@ -1,0 +1,81 @@
+<div class="container" id="editorContainer">
+<form id="docEditForm" {{action "documentUpdate" model on="submit"}}>
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="form-group">
+        <label for="documentName">Название</label>
+        <input class="form-control" id="documentName" placeholder="Название" value={{model.title}} required>
+      </div>
+      <input type="file" class="hidden" id="imageUpload" {{action 'imageUpload' on='change'}}>
+      <label class="btn btn-primary" for="imageUpload">
+        Прикрепить изображение
+      </label>
+      <input type="file" class="hidden" id="cssUpload" {{action 'cssUpload' on='change'}}>
+      <label class="btn btn-primary" for="cssUpload">
+        <span id="uploadCssButton">Прикрепить css-файл</span>
+      </label>
+      <span id="cssName">{{model.css_format}}</span>
+    </div>
+    <div class="col-lg-6">
+      <div class="form-group">
+        <label for="documentDesc">Описание</label>
+        <textarea class="form-control" id="documentDesc" rows='3'>{{model.description}}</textarea>
+      </div>      
+    </div>
+  </div>
+</form>
+
+  <label for="editor">Содержание</label>
+  <div id="editor">{{model.text}}</div>
+
+  <br>
+
+  {{#link-to 'list.show' model tagName="button" class="btn btn-primary"}}Назад{{/link-to}}
+  <button class="btn btn-danger" data-toggle="modal" data-target="#deleteDocModal">Удалить документ</button>
+  <button type="submit" form="docEditForm" class="btn btn-success pull-right" ><span id="saveDocButton">Сохранить документ</span></button>
+
+</div>
+
+<div class="modal fade" id="imageUploadModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Прикрепленный документ</h4>
+      </div>
+      <div class="modal-body">
+        <input class="form-control" id="imageURL" type="text" value={{uploadedImageURL}}>
+        {{#copy-button
+          clipboardTarget="#imageURL"
+          success='copySuccess'
+          error='copyError'
+          class='clipboardButton'
+        }}
+          <i class="fa fa-files-o" aria-hidden="true"></i>
+        {{/copy-button}}
+        <div class="alert img-alert" role="alert">{{alertMessage}}</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteDocModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Подтвердите удаление</h4>
+      </div>
+      <div class="modal-body">
+        <p>Вы уверены, что хотите удалить документ {{model.title}}?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" {{action "docDestroy" model}} data-dismiss="modal">Удалить</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>

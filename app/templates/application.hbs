@@ -1,3 +1,86 @@
-<h2 id="title">Welcome to Ember</h2>
+{{#if session.isAuthenticated}}
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false" id="dropdown-button-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        {{#link-to "index" class="navbar-brand"}}VKR{{/link-to}}
+      </div>
+
+      <div class="collapse navbar-collapse" id="navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          {{#link-to "list" tagName="li"}}
+            <a href="">Документы</a>
+          {{/link-to}}
+<!-- 
+          {{#link-to "editor" tagName="li"}}
+            <a href="">Editor</a>
+          {{/link-to}} -->
+        </ul>
+        
+        <ul class="nav navbar-nav navbar-right">
+          {{#if (eq currentUser.role 'admin')}}
+            <li><a href="" data-toggle="modal" data-target="#addUserModal">Добавить пользователя</a></li>
+          {{/if}}
+          <li><a>{{currentUser.name}}</a></li>
+          <li {{action 'invalidateSession'}}><a href="">Выход</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+{{/if}}
 
 {{outlet}}
+
+<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Создание пользователя</h4>
+      </div>
+      <div class="modal-body">
+        <form id="userAddForm" {{action "userCreate" on="submit"}}>
+          <div class="form-group">
+            <label for="newUserName">Имя пользователя</label>
+            <input class="form-control" id="newUserName" placeholder="Имя пользователя" required>
+          </div>
+          <div class="form-group">
+            <label for="newUserEmail">Email</label>
+            <input type="email" class="form-control" id="newUserEmail" placeholder="Email" required>
+          </div>
+          <div class="form-group">
+            <label for="newUserRole">Статус</label>
+            <select class="form-control" id="newUserRole" required>
+              <option value="" disabled selected hidden>Выберите статус пользователя</option>
+              <option value='student'>Студент</option>
+              <option value='lecturer'>Преподаватель</option>
+              <option value='admin'>Администратор</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="newUserPassword">Пароль</label>
+            <input type="password" class="form-control" id="newUserPassword" placeholder="Пароль" required>
+          </div>
+          <div class="form-group">
+            <label for="newUserPasswordRepeat">Повторите пароль</label>
+            <input type="password" class="form-control" id="newUserPasswordRepeat" placeholder="Введите пароль еще раз" required>
+          </div>
+        </form>
+        <div class="alert-messages">
+          <div class="alert alert-warning hidden" id='repeatWarning' role="alert">Ошибка при вводе пароля, попробуйте еще раз</div>
+          <div class="alert alert-warning hidden" id='lenghtWarning' role="alert">Пароль должен состоять из 6 и более символов</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" form="userAddForm" class="btn btn-success">Создать</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>

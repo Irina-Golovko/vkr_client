@@ -1,0 +1,173 @@
+<div class='container'>
+  <div class='row'>
+    <div class='col-sm-3'>
+      <div class='panel panel-default'>
+        <div class='panel-body'>
+
+          <div class='dropdown' id='courseDropdown'>
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              {{#if activeCourse}}
+                {{activeCourse.title}}
+              {{else}}
+                Выберите курс
+              {{/if}}
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownButton1" id="dropdownMenuCourses">
+              {{#each model as |course|}}
+                <li id='courseLine-{{course.id}}'>
+                  <a href='#' {{action 'selectCourse' course}}>{{course.title}}</a>
+                </li>
+              {{else}}
+                <li><a>Курсы отсутствуют</a></li>
+              {{/each}}
+              {{#if (not-eq applicationController.currentUser.role 'student')}}
+                <li><a href="" data-toggle="modal" data-target="#addCourseModal">Добавить курс</a></li>
+              {{/if}}
+            </ul>
+          </div>
+
+          {{#if activeCourse}}
+            <div class='dropdown' id='topicDropdown'>
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                {{#if activeTopic}}
+                  {{activeTopic.title}}
+                {{else}}
+                  Выберите тему
+                {{/if}}
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownButton2" id="dropdownMenuTopics">
+                {{#each activeCourse.topics as |topic|}}
+                  <li id='topicLine-{{topic.id}}'>
+                    <a href='#' {{action 'selectTopic' topic}}>{{topic.title}}</a>
+                  </li>
+                {{else}}
+                  {{#if (not-eq applicationController.currentUser.id activeCourse.user.id)}}
+                    <li><a>Темы отсутствуют</a></li>
+                  {{/if}}
+                {{/each}}
+                {{#if (not-eq applicationController.currentUser.role 'student')}}
+                  {{#if (eq applicationController.currentUser.id activeCourse.user.id)}}
+                    <li><a href="" data-toggle="modal" data-target="#addTopicModal">Добавить тему</a></li>
+                  {{/if}}
+                {{/if}}
+              </ul>
+            </div>
+          {{/if}}
+
+          {{#if activeTopic}}
+          <div class='dropdown' id='documentDropdown'>
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownButton3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              {{#if activeDocument}}
+                {{activeDocument.title}}
+              {{else}}
+                Выберите документ
+              {{/if}}
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownButton3" id="dropdownMenuDocuments">
+              {{#each activeTopic.documents as |document|}}
+                  <li id='documentLine-{{document.id}}'>
+                    <a href='#' {{action 'selectDocument' document}}>{{document.title}}</a>
+                  </li>
+              {{else}}
+                {{#if (not-eq applicationController.currentUser.id activeTopic.user.id)}}
+                  <li><a>Документы отсутствуют</a></li>
+                {{/if}}
+              {{/each}}
+              {{#if (not-eq applicationController.currentUser.role 'student')}}
+                {{#if (eq applicationController.currentUser.id activeTopic.user.id)}}
+                  <li><a href="" data-toggle="modal" data-target="#addDocumentModal">Добавить документ</a></li>
+                {{/if}}
+              {{/if}}
+            </ul>
+          </div>
+          {{/if}}
+
+        </div>
+      </div>
+    </div>
+
+      {{outlet}}
+
+  </div>
+</div>
+
+<div class="modal fade" id="addCourseModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Создание курса</h4>
+      </div>
+      <div class="modal-body">
+        <form id="addCourseForm" {{action 'courseCreate' on="submit"}}>
+          <div class="form-group">
+            <label for="newCourseTitle">Название курса</label>
+            <input class="form-control" id="newCourseTitle" placeholder="Название курса" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" form="addCourseForm" class="btn btn-success">Создать</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addTopicModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Создание темы курса {{activeCourse.title}}</h4>
+      </div>
+      <div class="modal-body">
+        <form id="addTopicForm" {{action 'topicCreate' on="submit"}}>
+          <div class="form-group">
+            <label for="newTopicTitle">Название темы</label>
+            <input class="form-control" id="newTopicTitle" placeholder="Название темы" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" form="addTopicForm" class="btn btn-success">Создать</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addDocumentModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Создание документа. Курс {{activeCourse.title}}, тема {{activeTopic.title}}</h4>
+      </div>
+      <div class="modal-body">
+        <form id="addDocumentForm" {{action 'documentCreate' on="submit"}}>
+          <div class="form-group">
+            <label for="newDocumentTitle">Название документа</label>
+            <input class="form-control" id="newDocumentTitle" placeholder="Название документа" required>
+          </div>
+          <div class="form-group">
+            <label for="newDocumentDesc">Описание</label>
+            <textarea id="newDocumentDesc" class="form-control" rows='5'></textarea>
+          </div>
+          <div class="form-group">
+            <label for="newDocumentFile" class="btn btn-primary">Прикрепить документ</label>
+            <input type="file" id="newDocumentFile" class="hidden" {{action "chooseFile" on="change"}}>
+            <div id="fileName"></div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" form="addDocumentForm" class="btn btn-success">Создать</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>
