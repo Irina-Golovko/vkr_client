@@ -16,13 +16,13 @@ export default Ember.Controller.extend({
     window.location = ENV.apiURL + '/' + response.link; 
   },
   actions: {
-    requestFile(type,callback) {
+    requestFile(type, callback) {
       let token = this.get('applicationController.session.session.authenticated.token'),
           email = this.get('applicationController.currentUser.email'),
           _this = this;
       Ember.$.ajax({
         headers: {
-          Authorization: 'Token ' + token + ', user_email=' + email                        
+          Authorization: 'Token ' + token + ', user_email=' + email
         },
         beforeSend() {
           Ember.$("#typeDownload").modal("hide");
