@@ -19,7 +19,7 @@ module.exports = function(environment) {
     }
   };
 
-  ENV.apiURL = 'http://192.168.1.3:3000'
+  ENV.apiURL = 'http://127.0.0.1:3000'
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;

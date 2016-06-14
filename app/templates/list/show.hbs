@@ -15,9 +15,9 @@
             <button class="btn btn-default" data-toggle="modal" data-target="#editTopicModal">Редактировать тему</button>
           </div>
         {{/if}}
-        <h3>{{model.title}}</h3>
+        <h3>Название: {{model.title}}</h3>
       </div>
-      <p>{{model.description}}</p>
+      <p>Описание: {{model.description}}</p>
       <br>
       <div class="btn-group">
         <button class="btn btn-default" {{action 'requestFile' 'html' showCallback}}>Открыть HTML</button>
@@ -48,11 +48,11 @@
       </div>
       <div class="modal-body">
         <div class="list-group">
-          <a href="#" class="list-group-item" {{action 'requestFile' 'latex' downloadCallback}}>LaTex</a>
+          <a href="#" class="list-group-item" {{action 'requestFile' 'latex' downloadCallback}}>LaTeX</a>
           <a href="#" class="list-group-item" {{action 'requestFile' 'pdf' downloadCallback}}>PDF</a>
           <a href="#" class="list-group-item" {{action 'requestFile' 'docx' downloadCallback}}>DOCX</a>
-          <a href="#" class="list-group-item" {{action 'requestFile' 'rtf' downloadCallback}}>RTF</a>
-          <a href="#" class="list-group-item" {{action 'requestFile' 'odc' downloadCallback}}>ODC</a>
+          <a href="#" class="list-group-item" {{action 'requestFile' 'fb2' downloadCallback}}>FB2</a>
+          <a href="#" class="list-group-item" {{action 'requestFile' 'epub' downloadCallback}}>EPUB</a>
         </div>
       </div>
       <div class="modal-footer">

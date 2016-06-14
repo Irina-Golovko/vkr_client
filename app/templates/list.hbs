@@ -16,7 +16,7 @@
             <ul class="dropdown-menu" aria-labelledby="dropdownButton1" id="dropdownMenuCourses">
               {{#each model as |course|}}
                 <li id='courseLine-{{course.id}}'>
-                  <a href='#' {{action 'selectCourse' course}}>{{course.title}}</a>
+                  <a href='#' {{action 'selectCourse' course}}>{{truncate course.title limit=25}}</a>
                 </li>
               {{else}}
                 <li><a>Курсы отсутствуют</a></li>
@@ -40,7 +40,7 @@
               <ul class="dropdown-menu" aria-labelledby="dropdownButton2" id="dropdownMenuTopics">
                 {{#each activeCourse.topics as |topic|}}
                   <li id='topicLine-{{topic.id}}'>
-                    <a href='#' {{action 'selectTopic' topic}}>{{topic.title}}</a>
+                    <a href='#' {{action 'selectTopic' topic}}>{{truncate topic.title limit=25}}</a>
                   </li>
                 {{else}}
                   {{#if (not-eq applicationController.currentUser.id activeCourse.user.id)}}
@@ -69,7 +69,7 @@
             <ul class="dropdown-menu" aria-labelledby="dropdownButton3" id="dropdownMenuDocuments">
               {{#each activeTopic.documents as |document|}}
                   <li id='documentLine-{{document.id}}'>
-                    <a href='#' {{action 'selectDocument' document}}>{{document.title}}</a>
+                    <a href='#' {{action 'selectDocument' document}}>{{truncate document.title limit=25}}</a>
                   </li>
               {{else}}
                 {{#if (not-eq applicationController.currentUser.id activeTopic.user.id)}}
